@@ -1,0 +1,11 @@
+LICENSE
+MANIFEST.in
+README.rst
+setup.py
+randomip/__init__.py
+randomip/randomip.py
+randomip.egg-info/PKG-INFO
+randomip.egg-info/SOURCES.txt
+randomip.egg-info/dependency_links.txt
+randomip.egg-info/requires.txt
+randomip.egg-info/top_level.txt
