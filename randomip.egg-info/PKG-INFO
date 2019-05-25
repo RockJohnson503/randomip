@@ -10,10 +10,10 @@ Description: =====
         Randomip
         =====
         
-        randomip是一个随机ip代理池,可以很好的在scrapy中使用,且无需维护ip池.
+        randomip是一个随机ip代理池,可以很好的在scrapy中使用,其中有西刺代理(XiciIp)以及快代理(KuaiIp)模块.
         
-        Quick start
-        -----------
+        快速使用
+        -------
         
         1. 安装randomip.
         
@@ -56,7 +56,7 @@ Description: =====
                 def process_request(self, request, spider):
                     request.meta['proxy'] = self.ips.get_random_ip()
         
-        4. 在scrapy中实例化时,spider为必填属性,后面的属性可以根据自己的需求来填.
+        在scrapy中实例化时,spider为必填属性,后面的属性可以根据自己的需求来填.
 Platform: UNKNOWN
 Classifier: Environment :: Web Environment
 Classifier: Framework :: Twisted
