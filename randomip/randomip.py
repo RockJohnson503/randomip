@@ -63,7 +63,9 @@ class BaseIp:
             raise ValueError('没有您需要的%s的代理,您可以换个代理模块或通过 page_size 属性增加获取的ip数量.' % type)
 
     def get_random_ip(self, type):
-        # 随机获取ip代理
+        """
+        :param type: 协议的类型,根据自己抓取的网站来输入对应的类型.
+        """
         if type.lower() != 'http' and type.lower() != 'https':
             raise KeyError('请输入正确的协议类型.(http, https不分大小写)')
         self._get_type_ip(type)
