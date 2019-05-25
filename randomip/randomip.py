@@ -119,9 +119,11 @@ class XiciIp(BaseIp):
             ip = all_texts[1].css('::text').get().strip()
             port = all_texts[2].css('::text').get().strip()
             proxy_type = all_texts[5].css('::text').get().strip()
+            time = all_texts[6].css('.bar::attr(title)').get()
+            time = float(time.replace('秒', ''))
 
             ip = '%s://%s:%s' % (proxy_type, ip, port)
-            if ip not in self.ips:
+            if time < 1 and ip not in self.ips:
                 self.ips.append(ip)
 
 
