@@ -54,10 +54,20 @@ class BaseIp:
     def _treq_get_content(self, content):
         pass
 
-    def get_random_ip(self):
+    def _get_type_ip(self, type):
+        self._new_ips = []
+        for ip in self.ips:
+            if type.lower() == ip[:ip.index('://')].lower():
+                self._new_ips.append(ip)
+        if self._new_ips == [] and self.ips != []:
+            raise ValueError('没有您需要的%s的代理,您可以换个代理模块或通过 page_size 属性增加获取的ip数量.' % type)
+
+    def get_random_ip(self, type):
         # 随机获取ip代理
-        if self.ips != []:
-            return random.choice(self.ips)
+        if type.lower() != 'http' and type.lower() != 'https':
+            raise KeyError('请输入正确的协议类型.(http, https不分大小写)')
+        self._get_type_ip(type)
+        return random.choice(self._new_ips)
 
     def judge_ip(self):
         http_url = 'https://www.baidu.com'
@@ -122,7 +132,7 @@ class XiciIp(BaseIp):
             time = all_texts[6].css('.bar::attr(title)').get()
             time = float(time.replace('秒', ''))
 
-            ip = '%s://%s:%s' % (proxy_type, ip, port)
+            ip = '%s://%s:%s' % (proxy_type.lower(), ip, port)
             if time < 1 and ip not in self.ips:
                 self.ips.append(ip)
 
@@ -162,6 +172,6 @@ class KuaiIp(BaseIp):
             port = all_texts[1].css('::text').get().strip()
             proxy_type = all_texts[3].css('::text').get().strip()
 
-            ip = '%s://%s:%s' % (proxy_type, ip, port)
+            ip = '%s://%s:%s' % (proxy_type.lower(), ip, port)
             if ip not in self.ips:
                 self.ips.append(ip)
