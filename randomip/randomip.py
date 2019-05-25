@@ -112,9 +112,9 @@ class XiciIp(BaseIp):
 
     def _treq_get_content(self, content):
         select = Selector(text=content.decode())
-        all_trs = select.css("#ip_list tbody tr")
+        all_trs = select.css("#ip_list tr")
 
-        for tr in all_trs:
+        for tr in all_trs[1:]:
             all_texts = tr.css("td")
             ip = all_texts[1].css('::text').get().strip()
             port = all_texts[2].css('::text').get().strip()
