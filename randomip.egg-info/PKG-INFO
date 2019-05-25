@@ -1,6 +1,6 @@
 Metadata-Version: 1.1
 Name: randomip
-Version: 1.0
+Version: 1.1
 Summary: 一个小型的随机ip代理池.
 Home-page: https://www.example.com/
 Author: Rock Johnson
@@ -11,6 +11,8 @@ Description: =====
         =====
         
         randomip是一个随机ip代理池,可以很好的在scrapy中使用,其中有西刺代理(XiciIp)以及快代理(KuaiIp)模块.
+        
+        个人推荐使用西刺代理,因为西刺代理里的ip速度普遍比快代理的速度快.
         
         快速使用
         -------
