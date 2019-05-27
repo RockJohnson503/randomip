@@ -15,7 +15,9 @@ randomip是一个随机ip代理池,可以很好的在scrapy中使用,其中有�
 
     cd randomip
 
-    pip install dist/randomip-1.1.tar.gz
+    python setup.py sdist
+
+    pip install dist/randomip-(版本号).tar.gz(.zip)
 
 2. 使用randomip.
 
@@ -25,7 +27,7 @@ randomip是一个随机ip代理池,可以很好的在scrapy中使用,其中有�
 
     >>> ip = XiciIp(page_size=2)
 
-    >>> ip.get_random_ip()
+    >>> ip.get_random_ip('https')
     'https://112.85.128.209:9999'
 
 3. 在scrapy中使用randomip.
@@ -48,6 +50,6 @@ randomip是一个随机ip代理池,可以很好的在scrapy中使用,其中有�
             self.ips = randomip.KuaiIp(spider=spider, delay=self.delay, page_size=self.page_size, concurrent=self.concurrent, headers=self.headers)
 
         def process_request(self, request, spider):
-            request.meta['proxy'] = self.ips.get_random_ip()
+            request.meta['proxy'] = self.ips.get_random_ip('http')
 
 在scrapy中实例化时,spider为必填属性,后面的属性可以根据自己的需求来填.
