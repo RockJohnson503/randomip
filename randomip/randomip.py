@@ -69,7 +69,8 @@ class BaseIp:
         if type.lower() != 'http' and type.lower() != 'https':
             raise KeyError('请输入正确的协议类型.(http, https不分大小写)')
         self._get_type_ip(type)
-        return random.choice(self._new_ips)
+        if self.ips != []:
+            return random.choice(self._new_ips)
 
     def judge_ip(self):
         http_url = 'https://www.baidu.com'
