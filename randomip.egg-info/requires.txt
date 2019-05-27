@@ -1,4 +1,0 @@
-Twisted
-requests>=2.22.0
-scrapy>=1.6.0
-treq>=18.6.0
