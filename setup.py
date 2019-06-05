@@ -38,6 +38,6 @@ setup(
         'Twisted',
         'scrapy>=1.6.0',
         'requests>=2.22.0',
-        'treq>=18.6.0',
+        'txrequests>=0.9.6',
     ]
 )
