@@ -5,7 +5,7 @@ File: randomip.py
 Author: Rock Johnson
 """
 import requests, random
-from treq import request, content
+from txrequests.sessions import Session
 from scrapy.selector import Selector
 from twisted.internet import reactor, defer, task
 
@@ -38,18 +38,21 @@ class BaseIp:
        pass
 
     @defer.inlineCallbacks
-    def _treq_crawl_ip(self, url):
+    def _download_page(self, url):
         yield task.deferLater(reactor, self.delay, lambda: None)
-        re = request('GET', self._url + str(url), headers=self.headers)
-        re.addCallback(self._treq_download_page)
-        yield re
+        with Session() as session:
+            def bg_cb(session, response):
+                return response
+
+            re = session.get(self._url + str(url), headers=self.headers, background_callback=bg_cb, timeout=5)
+            content = yield re
+        self._treq_download_page(content)
 
     @defer.inlineCallbacks
     def _treq_download_page(self, response):
-        if response.code >= 200 and response.code < 300:
-            con = content(response)
-            con.addCallback(self._treq_get_content)
-            yield con
+        if response.status_code >= 200 and response.status_code < 300:
+            self._treq_get_content(response.text)
+        yield None
 
     def _treq_get_content(self, content):
         pass
@@ -114,7 +117,7 @@ class XiciIp(BaseIp):
         if not page_size:
             html = requests.get("https://www.xicidaili.com/nn", headers=self.headers)
             page_size = int(Selector(text=html.text).css(".pagination a:nth-child(13)::text").get(""))
-        works = (self._treq_crawl_ip(url) for url in range(1, page_size + 1))
+        works = (self._download_page(url) for url in range(1, page_size + 1))
         coop = task.Cooperator()
         join = defer.DeferredList([coop.coiterate(works) for i in range(self.concurrent)])
         if self.spider:
@@ -156,7 +159,7 @@ class KuaiIp(BaseIp):
         if not page_size:
             html = requests.get("https://www.kuaidaili.com/free/inha/1/", headers=self.headers)
             page_size = int(Selector(text=html.text).css("#listnav li:nth-child(9) a::text").get(""))
-        works = (self._treq_crawl_ip(url) for url in range(1, page_size + 1))
+        works = (self._download_page(url) for url in range(1, page_size + 1))
         coop = task.Cooperator()
         join = defer.DeferredList([coop.coiterate(works) for i in range(self.concurrent)])
         if self.spider:
@@ -166,7 +169,7 @@ class KuaiIp(BaseIp):
         yield None
 
     def _treq_get_content(self, content):
-        select = Selector(text=content.decode())
+        select = Selector(text=content)
         all_trs = select.css("#list tbody tr")
 
         for tr in all_trs:
